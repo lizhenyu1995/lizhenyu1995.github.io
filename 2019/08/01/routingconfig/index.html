@@ -6,15 +6,23 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Archives | Hexo</title>
+  <title>同时访问内网和外网 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://yoursite.com/archives/index.html">
+  <meta name="description" content="背景实验中存在同时使用系统的内网及外部的互联网的需求，需要根据不同的目的地址将数据包从相应的网口上转发出去 解决思路通过命令行配置，固定路由，无须插拔网线，自动切换内外网。 解决方案一、获取内外网网关地址1、连接内网2、管理员方式运行cmd3、记录内网默认网关在命令行输入ipconfig 回车，找到默认内网网关，记住它一般情况下是10.x.x.254或192.x.x.254 4、断开内网，连接外网">
+<meta property="og:type" content="article">
+<meta property="og:title" content="同时访问内网和外网">
+<meta property="og:url" content="http://yoursite.com/2019/08/01/routingconfig/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="背景实验中存在同时使用系统的内网及外部的互联网的需求，需要根据不同的目的地址将数据包从相应的网口上转发出去 解决思路通过命令行配置，固定路由，无须插拔网线，自动切换内外网。 解决方案一、获取内外网网关地址1、连接内网2、管理员方式运行cmd3、记录内网默认网关在命令行输入ipconfig 回车，找到默认内网网关，记住它一般情况下是10.x.x.254或192.x.x.254 4、断开内网，连接外网">
 <meta property="og:locale" content="default">
+<meta property="og:image" content="http://yoursite.com/images/fig1.jpg">
+<meta property="og:image" content="http://yoursite.com/images/fig2.png">
+<meta property="og:image" content="http://yoursite.com/images/fig3.png">
+<meta property="og:updated_time" content="2019-08-03T15:34:34.629Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo">
+<meta name="twitter:title" content="同时访问内网和外网">
+<meta name="twitter:description" content="背景实验中存在同时使用系统的内网及外部的互联网的需求，需要根据不同的目的地址将数据包从相应的网口上转发出去 解决思路通过命令行配置，固定路由，无须插拔网线，自动切换内外网。 解决方案一、获取内外网网关地址1、连接内网2、管理员方式运行cmd3、记录内网默认网关在命令行输入ipconfig 回车，找到默认内网网关，记住它一般情况下是10.x.x.254或192.x.x.254 4、断开内网，连接外网">
+<meta name="twitter:image" content="http://yoursite.com/images/fig1.jpg">
   
     <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -150,130 +158,174 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
+            <article id="post-routingconfig" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
   
+    <h1 class="article-title" itemprop="name">
+      同时访问内网和外网
+    </h1>
   
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/08/01/routingconfig/" class="archive-article-date">
+
+        
+        <a href="/2019/08/01/routingconfig/" class="archive-article-date">
   	<time datetime="2019-08-01T14:15:10.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-01</time>
 </a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/08/01/routingconfig/">同时访问内网和外网</a>
-    </h1>
-  
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>实验中存在同时使用系统的内网及外部的互联网的需求，需要根据不同的目的地址将数据包从相应的网口上转发出去</p>
+<h1 id="解决思路"><a href="#解决思路" class="headerlink" title="解决思路"></a>解决思路</h1><p>通过命令行配置，固定路由，无须插拔网线，自动切换内外网。</p>
+<h1 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h1><h1 id="一、获取内外网网关地址"><a href="#一、获取内外网网关地址" class="headerlink" title="一、获取内外网网关地址"></a>一、获取内外网网关地址</h1><h3 id="1、连接内网"><a href="#1、连接内网" class="headerlink" title="1、连接内网"></a>1、连接内网</h3><h3 id="2、管理员方式运行cmd"><a href="#2、管理员方式运行cmd" class="headerlink" title="2、管理员方式运行cmd"></a>2、管理员方式运行cmd</h3><h3 id="3、记录内网默认网关"><a href="#3、记录内网默认网关" class="headerlink" title="3、记录内网默认网关"></a>3、记录内网默认网关</h3><p>在命令行输入ipconfig 回车，找到默认内网网关，记住它<br>一般情况下是10.x.x.254或192.x.x.254<br><img src="/images/fig1.jpg" alt="fig1"></p>
+<h3 id="4、断开内网，连接外网"><a href="#4、断开内网，连接外网" class="headerlink" title="4、断开内网，连接外网"></a>4、断开内网，连接外网</h3><h3 id="5、记录外网默认网关"><a href="#5、记录外网默认网关" class="headerlink" title="5、记录外网默认网关"></a>5、记录外网默认网关</h3><pre><code>在命令行输入ipconfig 回车，找到默认外网网关，记住它</code></pre><h1 id="二、查看路由信息"><a href="#二、查看路由信息" class="headerlink" title="二、查看路由信息"></a>二、查看路由信息</h1><p>在命令行输入route print 回车，看默认路由信息<br>找到永久路由：0.0.0.0</p>
+<p>一般情况下只存在 0.0.0.0 一条，图中是配置完成后的效果</p>
+<p><img src="/images/fig2.png" alt="fig2"></p>
+<h1 id="三、删除默认路由"><a href="#三、删除默认路由" class="headerlink" title="三、删除默认路由"></a>三、删除默认路由</h1><p>在命令行输入 </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">route delete 0.0.0.0</span><br></pre></td></tr></table></figure>
 
-        <div class="article-info info-on-right">
-          
-          
+<p>注意：如果有其他路由都使用route delete 进行删除，删除后再使用route print看看结果</p>
+<h1 id="四、添加永久路由"><a href="#四、添加永久路由" class="headerlink" title="四、添加永久路由"></a>四、添加永久路由</h1><h3 id="1、先添加默认网关，在命令行输入"><a href="#1、先添加默认网关，在命令行输入" class="headerlink" title="1、先添加默认网关，在命令行输入"></a>1、先添加默认网关，在命令行输入</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">route -p add 0.0.0.0 mask 0.0.0.0 192.168.1.254</span><br></pre></td></tr></table></figure>
 
+<p>192.168.1.254指的是在第一步里的外网网关，请修改为自己的实际地址</p>
+<h3 id="2、再添加内网网关，在命令行输入"><a href="#2、再添加内网网关，在命令行输入" class="headerlink" title="2、再添加内网网关，在命令行输入"></a>2、再添加内网网关，在命令行输入</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">route -p add 10.0.0.0 mask 255.0.0.0 10.75.12.254</span><br></pre></td></tr></table></figure>
+
+<p>10.75.12.254 指的是在第一步里的内网网关，请修改为自己的实际地址</p>
+<h1 id="五、最终效果"><a href="#五、最终效果" class="headerlink" title="五、最终效果"></a>五、最终效果</h1><p>在命令行输入route print 回车，检查路由信息，应该在永久路由中出现两条记录，第一条0.0.0.0，第二条10.0.0.0，效果如下图。<br>OK，这样就可以实现内外网同时连接且不需要切换网络的需求了，减少了重复劳动。<br><img src="/images/fig3.png" alt="fig3"></p>
+<h1 id="原理解说"><a href="#原理解说" class="headerlink" title="原理解说"></a>原理解说</h1><p>一般情况下，计算机默认的路由信息都是全部交给一个内网网关。<br>我们的解决思路就是告诉计算机：<br>所有网络请求都通过外网网关，但，对于内网网址（10.0.0.0网段），都通过内网网关。<br>所以最终内外网同时连接上后，此时内外网的默认网关同时存在，但计算机会根据路由配置自动转发。</p>
+<h1 id="命令说明"><a href="#命令说明" class="headerlink" title="命令说明"></a>命令说明</h1><p>route print 打印路由信息<br>route delete 清除默认网关<br>route -p add 0.0.0.0 mask 0.0.0.0 192.168.1.254 添加默认网关为外网网关<br>route -p add 10.0.0.0 mask 255.0.0.0 10.75.12.254 添加内网路由</p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/08/01/routingconfig/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/07/31/JDBCexecuteBatch/" class="archive-article-date">
-  	<time datetime="2019-07-31T12:40:21.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-07-31</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2019/07/31/JDBCexecuteBatch/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">JDBC启动事务使用批处理executeBatch（）</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
+        
+        
+    </div>
+</aside>
+
+
+
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/07/31/JDBCexecuteBatch/">JDBC启动事务使用批处理executeBatch（）</a>
-    </h1>
+  
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/07/07/B+&hash/" class="archive-article-date">
-  	<time datetime="2019-07-07T09:32:53.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-07-07</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/07/07/B+&hash/">B+树索引和哈希索引的区别</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/07/07/hello-world/" class="archive-article-date">
-  	<time datetime="2019-07-07T05:38:21.018Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-07-07</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/07/07/hello-world/">Hello World</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
-  
-    </div></section>
-  
-
-    
 
 
           </div>
@@ -296,8 +348,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
