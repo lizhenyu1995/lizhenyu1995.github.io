@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="1.Hash索引在不存在hash碰撞的情况下，只需一次读取，查询复杂度为O（1），比B+树快。 2.但是Hash索引是无序的，所以只适用于等值查询，而不能用于范围查询，自然也不具备排序性。根据hash索引查询出来的数据，还要再次进行排序。 3.B+树索引的复杂度等于树的高度，一般为3-5次IO。但是B+树叶子节点上的数据是排过序的，因此可以作用于范围查找，而且查询的数据是排过序的，无需再次排序。对">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-08-03T13:39:13.060Z">
+<meta property="og:updated_time" content="2019-08-04T05:44:30.738Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="B+树索引和哈希索引的区别">
 <meta name="twitter:description" content="1.Hash索引在不存在hash碰撞的情况下，只需一次读取，查询复杂度为O（1），比B+树快。 2.但是Hash索引是无序的，所以只适用于等值查询，而不能用于范围查询，自然也不具备排序性。根据hash索引查询出来的数据，还要再次进行排序。 3.B+树索引的复杂度等于树的高度，一般为3-5次IO。但是B+树叶子节点上的数据是排过序的，因此可以作用于范围查找，而且查询的数据是排过序的，无需再次排序。对">
@@ -178,6 +178,7 @@
 <p>2.但是Hash索引是无序的，所以只适用于等值查询，而不能用于范围查询，自然也不具备排序性。根据hash索引查询出来的数据，还要再次进行排序。</p>
 <p>3.B+树索引的复杂度等于树的高度，一般为3-5次IO。但是B+树叶子节点上的数据是排过序的，因此可以作用于范围查找，而且查询的数据是排过序的，无需再次排序。对于像“SELECT xxx FROM TABLE1 WHERE xxx LIKE ‘aaa%’”这样涉及到模糊匹配的查询，本质上也是范围查询。</p>
 <p>4.还有一点，数据库中的多列索引中，只能用B+树索引。数据在B+树的哪个结点上，只取决于最左边的列上的key，在结点中在一次按照第二列、第三列排序。所以B+树索引有最左原则的特性。</p>
+<a id="more"></a>
 <p>通常，B+树索引结构适用于绝大多数场景，像下面这种场景用哈希索引才更有优势：</p>
 <p>在HEAP表中，如果存储的数据重复度很低（也就是说基数很大），对该列数据以等值查询为主，没有范围查询、没有排序的时候，特别适合采用哈希索引</p>
 <p>例如这种SQL：<br>SELECT … FROM t WHERE C1 = ?; — 仅等值查询</p>

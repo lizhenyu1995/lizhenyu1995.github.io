@@ -8,17 +8,17 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>JDBC启动事务使用批处理executeBatch（） | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="JDBC使用MySQL处理大数据的时候,自然而然的想到要使用批处理， 普通的执行过程是：每处理一条数据，就访问一次数据库； 而批处理是：累积到一定数量，再一次性提交到数据库，减少了与数据库的交互次数，所以效率会大大提高 1、使用executeBatch（） 12345678910Class.forName(&quot;com.mysql.jdbc.Driver&quot;);         Connection c">
+  <meta name="description" content="JDBC使用MySQL处理大数据的时候,自然而然的想到要使用批处理， 普通的执行过程是：每处理一条数据，就访问一次数据库； 而批处理是：累积到一定数量，再一次性提交到数据库，减少了与数据库的交互次数，所以效率会大大提高">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JDBC启动事务使用批处理executeBatch（）">
 <meta property="og:url" content="http://yoursite.com/2019/07/31/JDBCexecuteBatch/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="JDBC使用MySQL处理大数据的时候,自然而然的想到要使用批处理， 普通的执行过程是：每处理一条数据，就访问一次数据库； 而批处理是：累积到一定数量，再一次性提交到数据库，减少了与数据库的交互次数，所以效率会大大提高 1、使用executeBatch（） 12345678910Class.forName(&quot;com.mysql.jdbc.Driver&quot;);         Connection c">
+<meta property="og:description" content="JDBC使用MySQL处理大数据的时候,自然而然的想到要使用批处理， 普通的执行过程是：每处理一条数据，就访问一次数据库； 而批处理是：累积到一定数量，再一次性提交到数据库，减少了与数据库的交互次数，所以效率会大大提高">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-08-03T13:53:08.543Z">
+<meta property="og:updated_time" content="2019-08-04T05:45:55.910Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JDBC启动事务使用批处理executeBatch（）">
-<meta name="twitter:description" content="JDBC使用MySQL处理大数据的时候,自然而然的想到要使用批处理， 普通的执行过程是：每处理一条数据，就访问一次数据库； 而批处理是：累积到一定数量，再一次性提交到数据库，减少了与数据库的交互次数，所以效率会大大提高 1、使用executeBatch（） 12345678910Class.forName(&quot;com.mysql.jdbc.Driver&quot;);         Connection c">
+<meta name="twitter:description" content="JDBC使用MySQL处理大数据的时候,自然而然的想到要使用批处理， 普通的执行过程是：每处理一条数据，就访问一次数据库； 而批处理是：累积到一定数量，再一次性提交到数据库，减少了与数据库的交互次数，所以效率会大大提高">
   
     <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -177,6 +177,7 @@
         <p>JDBC使用MySQL处理大数据的时候,自然而然的想到要使用批处理，</p>
 <p>普通的执行过程是：每处理一条数据，就访问一次数据库；</p>
 <p>而批处理是：累积到一定数量，再一次性提交到数据库，减少了与数据库的交互次数，所以效率会大大提高</p>
+<a id="more"></a>
 <p>1、使用executeBatch（）</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Class.forName(<span class="string">"com.mysql.jdbc.Driver"</span>);</span><br><span class="line">         Connection conn = DriverManager.getConnection(dbUrl, user, password);</span><br><span class="line">         PreparedStatement pstmt = conn.prepareStatement(<span class="string">"update content set introtext=? where id=?"</span>);</span><br><span class="line"></span><br><span class="line">         <span class="keyword">for</span>(int i=0; i&lt;10000; i++)&#123;</span><br><span class="line">             pstmt.setString(1, <span class="string">"abc"</span>+i);</span><br><span class="line">             pstmt.setInt(2, id);</span><br><span class="line">             pstmt.addBatch();//添加到同一个批处理中</span><br><span class="line">         &#125;</span><br><span class="line">         pstmt.executeBatch();//执行批处理</span><br></pre></td></tr></table></figure>
 

@@ -174,24 +174,9 @@
       
         <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>实验中存在同时使用系统的内网及外部的互联网的需求，需要根据不同的目的地址将数据包从相应的网口上转发出去</p>
 <h1 id="解决思路"><a href="#解决思路" class="headerlink" title="解决思路"></a>解决思路</h1><p>通过命令行配置，固定路由，无须插拔网线，自动切换内外网。</p>
-<h1 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h1><h1 id="一、获取内外网网关地址"><a href="#一、获取内外网网关地址" class="headerlink" title="一、获取内外网网关地址"></a>一、获取内外网网关地址</h1><h3 id="1、连接内网"><a href="#1、连接内网" class="headerlink" title="1、连接内网"></a>1、连接内网</h3><h3 id="2、管理员方式运行cmd"><a href="#2、管理员方式运行cmd" class="headerlink" title="2、管理员方式运行cmd"></a>2、管理员方式运行cmd</h3><h3 id="3、记录内网默认网关"><a href="#3、记录内网默认网关" class="headerlink" title="3、记录内网默认网关"></a>3、记录内网默认网关</h3><p>在命令行输入ipconfig 回车，找到默认内网网关，记住它<br>一般情况下是10.x.x.254或192.x.x.254<br><img src="/images/fig1.jpg" alt="fig1"></p>
-<h3 id="4、断开内网，连接外网"><a href="#4、断开内网，连接外网" class="headerlink" title="4、断开内网，连接外网"></a>4、断开内网，连接外网</h3><h3 id="5、记录外网默认网关"><a href="#5、记录外网默认网关" class="headerlink" title="5、记录外网默认网关"></a>5、记录外网默认网关</h3><pre><code>在命令行输入ipconfig 回车，找到默认外网网关，记住它</code></pre><h1 id="二、查看路由信息"><a href="#二、查看路由信息" class="headerlink" title="二、查看路由信息"></a>二、查看路由信息</h1><p>在命令行输入route print 回车，看默认路由信息<br>找到永久路由：0.0.0.0</p>
-<p>一般情况下只存在 0.0.0.0 一条，图中是配置完成后的效果</p>
-<p><img src="/images/fig2.png" alt="fig2"></p>
-<h1 id="三、删除默认路由"><a href="#三、删除默认路由" class="headerlink" title="三、删除默认路由"></a>三、删除默认路由</h1><p>在命令行输入 </p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">route delete 0.0.0.0</span><br></pre></td></tr></table></figure>
-
-<p>注意：如果有其他路由都使用route delete 进行删除，删除后再使用route print看看结果</p>
-<h1 id="四、添加永久路由"><a href="#四、添加永久路由" class="headerlink" title="四、添加永久路由"></a>四、添加永久路由</h1><h3 id="1、先添加默认网关，在命令行输入"><a href="#1、先添加默认网关，在命令行输入" class="headerlink" title="1、先添加默认网关，在命令行输入"></a>1、先添加默认网关，在命令行输入</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">route -p add 0.0.0.0 mask 0.0.0.0 192.168.1.254</span><br></pre></td></tr></table></figure>
-
-<p>192.168.1.254指的是在第一步里的外网网关，请修改为自己的实际地址</p>
-<h3 id="2、再添加内网网关，在命令行输入"><a href="#2、再添加内网网关，在命令行输入" class="headerlink" title="2、再添加内网网关，在命令行输入"></a>2、再添加内网网关，在命令行输入</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">route -p add 10.0.0.0 mask 255.0.0.0 10.75.12.254</span><br></pre></td></tr></table></figure>
-
-<p>10.75.12.254 指的是在第一步里的内网网关，请修改为自己的实际地址</p>
-<h1 id="五、最终效果"><a href="#五、最终效果" class="headerlink" title="五、最终效果"></a>五、最终效果</h1><p>在命令行输入route print 回车，检查路由信息，应该在永久路由中出现两条记录，第一条0.0.0.0，第二条10.0.0.0，效果如下图。<br>OK，这样就可以实现内外网同时连接且不需要切换网络的需求了，减少了重复劳动。<br><img src="/images/fig3.png" alt="fig3"></p>
-<h1 id="原理解说"><a href="#原理解说" class="headerlink" title="原理解说"></a>原理解说</h1><p>一般情况下，计算机默认的路由信息都是全部交给一个内网网关。<br>我们的解决思路就是告诉计算机：<br>所有网络请求都通过外网网关，但，对于内网网址（10.0.0.0网段），都通过内网网关。<br>所以最终内外网同时连接上后，此时内外网的默认网关同时存在，但计算机会根据路由配置自动转发。</p>
-<h1 id="命令说明"><a href="#命令说明" class="headerlink" title="命令说明"></a>命令说明</h1><p>route print 打印路由信息<br>route delete 清除默认网关<br>route -p add 0.0.0.0 mask 0.0.0.0 192.168.1.254 添加默认网关为外网网关<br>route -p add 10.0.0.0 mask 255.0.0.0 10.75.12.254 添加内网路由</p>
-
+        
+          <a class="article-more-a" href="/2019/08/01/routingconfig/#more">more >></a>
+        
       
 
       
@@ -256,19 +241,9 @@
         <p>JDBC使用MySQL处理大数据的时候,自然而然的想到要使用批处理，</p>
 <p>普通的执行过程是：每处理一条数据，就访问一次数据库；</p>
 <p>而批处理是：累积到一定数量，再一次性提交到数据库，减少了与数据库的交互次数，所以效率会大大提高</p>
-<p>1、使用executeBatch（）</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Class.forName(<span class="string">"com.mysql.jdbc.Driver"</span>);</span><br><span class="line">         Connection conn = DriverManager.getConnection(dbUrl, user, password);</span><br><span class="line">         PreparedStatement pstmt = conn.prepareStatement(<span class="string">"update content set introtext=? where id=?"</span>);</span><br><span class="line"></span><br><span class="line">         <span class="keyword">for</span>(int i=0; i&lt;10000; i++)&#123;</span><br><span class="line">             pstmt.setString(1, <span class="string">"abc"</span>+i);</span><br><span class="line">             pstmt.setInt(2, id);</span><br><span class="line">             pstmt.addBatch();//添加到同一个批处理中</span><br><span class="line">         &#125;</span><br><span class="line">         pstmt.executeBatch();//执行批处理</span><br></pre></td></tr></table></figure>
-
-<p>如果使用了 addBatch() -&gt; executeBatch() 还是很慢，那就得使用到这个参数了</p>
-<pre><code>rewriteBatchedStatements=true (启动批处理操作)
-
-在数据库连接URL后面加上这个参数：      
-
-    String dbUrl =  &quot;jdbc:mysql://localhost:3306/User? rewriteBatchedStatements=true&quot;;</code></pre><p>2、启用事务处理</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">Class.forName(<span class="string">"com.mysql.jdbc.Driver"</span>);</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">Connection conn = DriverManager.getConnection(dbUrl, user, password);</span><br><span class="line"></span><br><span class="line">conn.setAutoCommit(<span class="literal">false</span>);//将自动提交关闭</span><br><span class="line">PreparedStatement pstmt = conn.prepareStatement(<span class="string">"update content set introtext=? where id=?"</span>);</span><br><span class="line">pstmt.setString(1, tempintrotext);</span><br><span class="line">pstmt.setInt(2, id);</span><br><span class="line">pstmt.addBatch();</span><br><span class="line">pstmt.executeBatch();</span><br><span class="line">pstmt.close();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">conn.commit();//执行完后，手动提交事务</span><br><span class="line">conn.setAutoCommit(<span class="literal">true</span>);//在把自动提交打开</span><br><span class="line">conn.close();</span><br></pre></td></tr></table></figure>
-
-<p>3、事务和批处理混合使用  </p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"> Class.forName(<span class="string">"com.mysql.jdbc.Driver"</span>);</span><br><span class="line"></span><br><span class="line"> Connection conn = DriverManager.getConnection(dbUrl, user, password);</span><br><span class="line"></span><br><span class="line"> conn.setAutoCommit(<span class="literal">false</span>);//将自动提交关闭</span><br><span class="line"> PreparedStatement pstmt = conn.prepareStatement(<span class="string">"update content set introtext=? where id=?"</span>);</span><br><span class="line"></span><br><span class="line"> <span class="keyword">for</span>(int i=0; i&lt;1000000; i++)&#123;</span><br><span class="line">      pstmt.setString(1, tempintrotext);</span><br><span class="line">      pstmt.setInt(2, id);</span><br><span class="line">      pstmt.addBatch();</span><br><span class="line"></span><br><span class="line">      //每500条执行一次，避免内存不够的情况，可参考，Eclipse设置JVM的内存参数</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span>(i&gt;0 &amp;&amp; i%500==0)&#123;</span><br><span class="line">           pstmt.executeBatch();</span><br><span class="line"></span><br><span class="line">           //如果不想出错后，完全没保留数据，则可以每执行一次提交一次，但得保证数据不会重复</span><br><span class="line"></span><br><span class="line">           conn.commit();</span><br><span class="line"></span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"> pstmt.executeBatch();//执行最后剩下不够500条的</span><br><span class="line"> pstmt.close();</span><br><span class="line"></span><br><span class="line"> conn.commit();//执行完后，手动提交事务</span><br><span class="line"> conn.setAutoCommit(<span class="literal">true</span>);//在把自动提交打开</span><br><span class="line"> conn.close();</span><br></pre></td></tr></table></figure>
+        
+          <a class="article-more-a" href="/2019/07/31/JDBCexecuteBatch/#more">more >></a>
+        
       
 
       
@@ -334,11 +309,9 @@
 <p>2.但是Hash索引是无序的，所以只适用于等值查询，而不能用于范围查询，自然也不具备排序性。根据hash索引查询出来的数据，还要再次进行排序。</p>
 <p>3.B+树索引的复杂度等于树的高度，一般为3-5次IO。但是B+树叶子节点上的数据是排过序的，因此可以作用于范围查找，而且查询的数据是排过序的，无需再次排序。对于像“SELECT xxx FROM TABLE1 WHERE xxx LIKE ‘aaa%’”这样涉及到模糊匹配的查询，本质上也是范围查询。</p>
 <p>4.还有一点，数据库中的多列索引中，只能用B+树索引。数据在B+树的哪个结点上，只取决于最左边的列上的key，在结点中在一次按照第二列、第三列排序。所以B+树索引有最左原则的特性。</p>
-<p>通常，B+树索引结构适用于绝大多数场景，像下面这种场景用哈希索引才更有优势：</p>
-<p>在HEAP表中，如果存储的数据重复度很低（也就是说基数很大），对该列数据以等值查询为主，没有范围查询、没有排序的时候，特别适合采用哈希索引</p>
-<p>例如这种SQL：<br>SELECT … FROM t WHERE C1 = ?; — 仅等值查询</p>
-<p>在大多数场景下，都会有范围查询、排序、分组等查询特征，用B+树索引就可以了。</p>
-
+        
+          <a class="article-more-a" href="/2019/07/07/B+&hash/#more">more >></a>
+        
       
 
       
@@ -402,18 +375,9 @@
       
         <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
 <h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-
+        
+          <a class="article-more-a" href="/2019/07/07/hello-world/#more">more >></a>
+        
       
 
       
